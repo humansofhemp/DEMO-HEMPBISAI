@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "80:8080" # Host port 80 mapped to container port 8080. You can change 80 to any other available port on your host.
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY} # This will be injected by Coolify
+      - PORT=8080 # Ensure the server inside the container uses this port
+    restart: unless-stopped
+    # If you need to mount volumes, for example, for logs or other persistent data,
+    # you can define them here. For a static frontend, this is often not necessary.
+    # volumes:
+    #   - ./logs:/usr/src/app/logs # Example volume mount
+networks:
+  default:
+    driver: bridge
