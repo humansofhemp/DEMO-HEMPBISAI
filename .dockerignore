@@ -1,0 +1,43 @@
+# Node modules
+node_modules
+
+# Git folder
+.git
+
+# Environment files
+.env
+.env.*
+!/.env.example
+
+# Vite cache files
+vite.config.ts.timestamp-*.mjs
+
+# Docker files
+Dockerfile
+docker-compose.yml
+
+# Readme
+README.md
+
+# Server file (copied explicitly in Dockerfile)
+# server.js
+
+# Build output - only if not using multi-stage builds where it's copied from a previous stage
+# If your Dockerfile copies from a build stage, 'dist' should not be here.
+# In our case, 'dist' is generated within the 'builder' stage and copied to the final stage,
+# so it's not part of the initial context copy if COPY . . happens before the build.
+# However, to be safe and explicit, especially if the COPY . . were to include it before build,
+# it's often listed. For our current Dockerfile, it's not strictly necessary for 'dist'.
+# dist
+
+# Logs and temp files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+temp
+
+# OS generated files
+.DS_Store
+Thumbs.db

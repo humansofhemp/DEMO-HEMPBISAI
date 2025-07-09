@@ -1,0 +1,41 @@
+# Use an official Node.js runtime as a parent image
+FROM node:20-alpine AS builder
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json (or yarn.lock)
+COPY package.json package-lock.json ./
+
+# Install dependencies
+# Using --omit=dev to not install devDependencies for production build stage
+RUN npm install --omit=dev
+
+# Copy the rest of the application source code
+COPY . .
+
+# Build the Vite application
+RUN npm run build
+
+# Production stage
+FROM node:20-alpine
+
+WORKDIR /usr/src/app
+
+# Copy built assets from builder stage
+COPY --from=builder /usr/src/app/dist ./dist
+COPY package.json package-lock.json ./
+
+# We need 'express' to run the server.js, so install production dependencies.
+# If server.js had no external dependencies, this could be skipped by copying node_modules too.
+# However, it's cleaner to install only what's needed for production.
+RUN npm install --omit=dev --production
+
+# Copy the server.js file (will be created in the next step)
+COPY server.js .
+
+# Expose the port the app runs on
+EXPOSE 8080
+
+# Command to run the application
+CMD ["node", "server.js"]
