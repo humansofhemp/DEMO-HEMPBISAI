@@ -8,8 +8,8 @@ WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 
 # Install dependencies
-# Using --omit=dev to not install devDependencies for production build stage
-RUN npm install --omit=dev
+# All dependencies (including devDependencies like Vite) are needed for the build
+RUN npm install
 
 # Copy the rest of the application source code
 COPY . .
