@@ -77,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({
           </button>
           <div className="flex items-center space-x-2">
             {/* Logo background can be a lighter shade of the accent or a contrasting dark neutral */}
-            <img src="/logo.png" alt="Hempbis AI Logo" className={`w-8 h-8 rounded-full object-contain bg-${accentBase}-700/50 p-0.5`} />
+            <img src="https://docs.hempbis.com/logo.png" alt="Hempbis AI Logo" className={`w-8 h-8 rounded-full object-contain bg-${accentBase}-700/50 p-0.5`} />
             <h1 className={`text-xl font-semibold tracking-tight hidden sm:block ${headerTextColor}`}>Hempbis AI</h1>
           </div>
         </div>
