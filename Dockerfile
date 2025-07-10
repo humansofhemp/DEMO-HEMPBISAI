@@ -1,6 +1,13 @@
 # Use an official Node.js runtime as a parent image
 FROM node:20-alpine AS builder
 
+# Declare build argument that can be passed from docker-compose.yml
+ARG GEMINI_API_KEY
+
+# Set the build argument as an environment variable within this builder stage
+# This makes it accessible to process.env.GEMINI_API_KEY during npm run build
+ENV GEMINI_API_KEY=${GEMINI_API_KEY}
+
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
@@ -15,6 +22,7 @@ RUN npm install
 COPY . .
 
 # Build the Vite application
+# GEMINI_API_KEY (from ENV above) will be available to vite.config.ts here
 RUN npm run build
 
 # Production stage

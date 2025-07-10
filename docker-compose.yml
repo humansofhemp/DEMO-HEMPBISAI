@@ -2,7 +2,10 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        GEMINI_API_KEY: ${GEMINI_API_KEY} # Pass the env var from Coolify's environment as a build arg
     ports:
       - "8080" # Expose container port 8080 to a dynamic host port. Coolify's reverse proxy will pick this up.
     environment:
