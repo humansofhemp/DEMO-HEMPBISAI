@@ -740,7 +740,7 @@ const App: React.FC = () => {
   if (isLoading && !activeThreadId && chatThreads.length === 0) { // Initial full page load
     return (
         <div className="flex flex-col h-screen bg-slate-950 items-center justify-center text-slate-300">
-            <img src="/logo.png" alt="Hempbis AI Loading" className="w-24 h-24 mb-6 animate-pulse opacity-80" />
+            <img src="https://docs.hempbis.com/logo.png" alt="Hempbis AI Loading" className="w-24 h-24 mb-6 animate-pulse opacity-80" />
             <LoadingSpinner size="w-10 h-10" color={`text-${activePersona.accentColor}-500`} />
             <p className="mt-4 text-lg">Initializing Hempbis AI...</p>
             {apiKeyMissing && <p className="text-red-400 text-sm mt-2">API Key not found. Please configure it.</p>}
