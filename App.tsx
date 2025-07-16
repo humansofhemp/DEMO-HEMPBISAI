@@ -18,6 +18,7 @@ import ChatInput from './components/ChatInput';
 import Footer from './components/Footer';
 import LoadingSpinner from './components/LoadingSpinner';
 import ChatHistorySidebar from './components/ChatHistorySidebar';
+import WeeklyTrendsView from './components/WeeklyTrendsView';
 import { 
   initializeGeminiGlobal, 
   createChatWithHistory, 
@@ -70,6 +71,11 @@ const App: React.FC = () => {
     return false;
   });
   const [showConversationStarters, setShowConversationStarters] = useState<boolean>(false);
+  const [currentView, setCurrentView] = useState<'chat' | 'trends'>('chat');
+
+  const handleToggleWeeklyTrends = () => {
+    setCurrentView(prev => prev === 'trends' ? 'chat' : 'trends');
+  };
 
 
   useEffect(() => {
@@ -768,36 +774,43 @@ const App: React.FC = () => {
           activePersona={activePersona}
           onPersonaChange={handlePersonaChange}
           onToggleSidebar={handleToggleSidebar}
+          onToggleWeeklyTrends={handleToggleWeeklyTrends}
           apiKeyAvailable={!apiKeyMissing}
         />
-        <main 
-            ref={chatContainerRef} 
-            className={`flex-1 overflow-y-auto p-4 md:p-6 space-y-4 ${mainAreaBg} transition-colors duration-500 ease-in-out relative`} // Ensure main takes up space
-            aria-live="polite"
-            role="log"
-        >
-          {isLoading && activeThreadId && ( // Loading indicator when switching threads or initial load of a thread
-            <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm z-10">
-                <LoadingSpinner size="w-10 h-10" color={`text-${activePersona.accentColor}-500`}/>
-            </div>
-          )}
-          {renderConversationStarters()}
-          {messages.map((msg) => (
-            <ChatMessage key={msg.id} message={msg} onSuggestionClick={handleAiSuggestionClick} />
-          ))}
-          {inputLoading && !currentStreamingBotId && messages.length > 0 && !showConversationStarters && ( // General input loading for non-streaming phase like persona init
-              <div className="flex justify-center py-2">
-                  <LoadingSpinner size="w-6 h-6" color={`text-${activePersona.accentColor}-400`} />
-              </div>
-          )}
-        </main>
-        <ChatInput 
-            onSendMessage={handleSendMessage} 
-            isLoading={inputLoading || apiKeyMissing} 
-            activePersona={activePersona}
-            onPersonaChange={handlePersonaChange} // Keep this for ChatInput's own persona switcher
-            allPersonas={AI_PERSONAS} // For ChatInput's persona switcher
-        />
+        {currentView === 'trends' ? (
+          <WeeklyTrendsView />
+        ) : (
+          <>
+            <main
+                ref={chatContainerRef}
+                className={`flex-1 overflow-y-auto p-4 md:p-6 space-y-4 ${mainAreaBg} transition-colors duration-500 ease-in-out relative`} // Ensure main takes up space
+                aria-live="polite"
+                role="log"
+            >
+              {isLoading && activeThreadId && ( // Loading indicator when switching threads or initial load of a thread
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm z-10">
+                    <LoadingSpinner size="w-10 h-10" color={`text-${activePersona.accentColor}-500`}/>
+                </div>
+              )}
+              {renderConversationStarters()}
+              {messages.map((msg) => (
+                <ChatMessage key={msg.id} message={msg} onSuggestionClick={handleAiSuggestionClick} />
+              ))}
+              {inputLoading && !currentStreamingBotId && messages.length > 0 && !showConversationStarters && ( // General input loading for non-streaming phase like persona init
+                  <div className="flex justify-center py-2">
+                      <LoadingSpinner size="w-6 h-6" color={`text-${activePersona.accentColor}-400`} />
+                  </div>
+              )}
+            </main>
+            <ChatInput
+                onSendMessage={handleSendMessage}
+                isLoading={inputLoading || apiKeyMissing}
+                activePersona={activePersona}
+                onPersonaChange={handlePersonaChange} // Keep this for ChatInput's own persona switcher
+                allPersonas={AI_PERSONAS} // For ChatInput's persona switcher
+            />
+          </>
+        )}
         <Footer />
       </div>
     </div>
