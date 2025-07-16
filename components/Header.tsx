@@ -1,13 +1,12 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Menu, ChevronDown, Bot, Brain, Leaf, Scale, Check as CheckIcon, Newspaper } from 'lucide-react';
+import { Menu, ChevronDown, Bot, Brain, Leaf, Scale, Check as CheckIcon } from 'lucide-react';
 import { AIPersona, AI_PERSONAS, DEFAULT_PERSONA_ID } from '../constants';
 
 interface HeaderProps {
   activePersona: AIPersona;
   onPersonaChange: (personaId: string) => void;
   onToggleSidebar: () => void;
-  onToggleWeeklyTrends: () => void;
   apiKeyAvailable: boolean;
 }
 
@@ -83,15 +82,7 @@ const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={onToggleWeeklyTrends}
-            className={`p-2 rounded-md text-${accentBase}-200 hover:bg-${accentBase}-700/70 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-${accentBase}-400`}
-            aria-label="Show weekly trends"
-            title="Show weekly trends"
-          >
-            <Newspaper className="w-5 h-5" />
-          </button>
+        <div className="flex items-center space-x-3">
           <div className="relative" ref={dropdownRef}>
             <button
               type="button"
