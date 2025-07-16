@@ -1,6 +1,6 @@
 
 
-export const GEMINI_MODEL_NAME = 'gemini-2.5-flash-preview-04-17'; // Unified model
+export const GEMINI_MODEL_NAME = 'gemini-2.5-pro'; // Unified model
 
 export const HEMP_BIS_AI_SYSTEM_INSTRUCTION_BASE = `You are Hempbis AI, an advanced and highly knowledgeable AI assistant. Your dedicated expertise is to serve as an expert guide on all aspects of cannabis and hemp, with a specific and deep focus on the Indian context.
 
