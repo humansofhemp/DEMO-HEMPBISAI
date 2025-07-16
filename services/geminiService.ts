@@ -1,8 +1,14 @@
 
 
-import { GoogleGenAI, Chat, GenerateContentResponse, Part, Content } from "@google/genai";
+import { GoogleGenAI, Chat, GenerateContentResponse, Part, Content, ChatSession } from "@google/genai";
 import { Message, MessageSender } from '../types'; // Added static import
-import { PERSONA_RESEARCH_SCIENTIST_ID } from '../constants'; // Import persona ID
+import {
+  AI_PERSONAS,
+  PERSONA_RESEARCH_SCIENTIST_ID,
+  PERSONA_CULTIVATOR_AGRONOMIST_ID,
+  PERSONA_POLICY_LAW_EXPERT_ID,
+  PERSONA_HEMPBIS_AI_ID,
+} from '../constants';
 
 let ai: GoogleGenAI | null = null;
 // currentChat will now be managed per thread in App.tsx, this service will create/use chats as needed.
@@ -156,4 +162,84 @@ export const sendMessageToGeminiStream = async (
 
 export const isApiKeyAvailable = (): boolean => {
     return !!getApiKey();
+};
+
+const fetchNewsArticles = async (): Promise<any[]> => {
+  // Placeholder: In a real implementation, this would call a news API
+  console.log("Fetching news articles...");
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  return [
+    { title: "New Hemp Variety Shows Drought Resistance", content: "Scientists have developed a new hemp variety that requires 30% less water." },
+    { title: "India Considers Relaxing Hemp Cultivation Laws", content: "A parliamentary committee is discussing a proposal to decriminalize hemp farming." },
+    { title: "CBD Market in India to Triple by 2028", content: "A new market report predicts massive growth in the Indian CBD market." },
+  ];
+};
+
+const analyzeWithPersona = async (
+  personaId: string,
+  articles: string
+): Promise<string> => {
+  const persona = AI_PERSONAS.find((p) => p.id === personaId);
+  if (!persona) {
+    throw new Error(`Persona ${personaId} not found.`);
+  }
+
+  const chat = await createChatWithHistory(
+    persona.modelName,
+    persona.systemInstruction,
+    persona.id
+  );
+
+  if (!chat) {
+    throw new Error(`Failed to create chat for persona ${personaId}.`);
+  }
+
+  const prompt = `Analyze these articles and report ONLY on your area of expertise:\n\n${articles}`;
+  const result = await (chat as ChatSession).sendMessage(prompt);
+  return result.response.text();
+};
+
+export const generateDigest = async (): Promise<string> => {
+  if (!initializeGeminiGlobal()) {
+    throw new Error("Failed to initialize Gemini AI service.");
+  }
+
+  const articles = await fetchNewsArticles();
+  const articlesString = articles.map(a => `Title: ${a.title}\nContent: ${a.content}`).join('\n\n');
+
+  const [scientistReport, cultivatorReport, policyReport] = await Promise.all([
+    analyzeWithPersona(PERSONA_RESEARCH_SCIENTIST_ID, articlesString),
+    analyzeWithPersona(PERSONA_CULTIVATOR_AGRONOMIST_ID, articlesString),
+    analyzeWithPersona(PERSONA_POLICY_LAW_EXPERT_ID, articlesString),
+  ]);
+
+  const editorPersona = AI_PERSONAS.find((p) => p.id === PERSONA_HEMPBIS_AI_ID);
+  if (!editorPersona) {
+    throw new Error("Editor persona not found.");
+  }
+
+  const editorChat = await createChatWithHistory(
+    editorPersona.modelName,
+    editorPersona.systemInstruction,
+    editorPersona.id
+  );
+
+  if (!editorChat) {
+    throw new Error("Failed to create chat for editor persona.");
+  }
+
+  const editorPrompt = `You are the editor-in-chief. Combine the following three specialist reports into a single, cohesive 'Weekly Intelligence Briefing'. Write a short, engaging introduction, then present each specialist's findings under a clear heading (e.g., 'Scientific & Research Front', 'On The Farm', 'Policy & Legal Landscape'). Ensure the final output is polished and easy to read in Markdown format. Here are the reports:
+
+### Scientific Report
+${scientistReport}
+
+### Cultivator Report
+${cultivatorReport}
+
+### Policy Report
+${policyReport}
+`;
+
+  const finalDigest = await (editorChat as ChatSession).sendMessage(editorPrompt);
+  return finalDigest.response.text();
 };
