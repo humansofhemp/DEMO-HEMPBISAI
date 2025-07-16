@@ -296,7 +296,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
 
   return (
-    <div className={`p-3 md:p-4 bg-slate-800/80 border-t ${topBorderClass} sticky bottom-0 backdrop-blur-sm transition-colors duration-300`}>
+    <div className="p-2 md:p-4 bg-slate-800/80 border-t border-slate-700/70 sticky bottom-0 backdrop-blur-sm"> {/* Reduced padding on mobile */}
       {(imagePreviewUrl || nonImageFileName || fileError) && (
         <div className="mb-2 p-2 border border-slate-600 rounded-lg bg-slate-700/50 relative w-full max-w-md shadow-md">
           {fileError && (
@@ -333,7 +333,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
 
       <form
         onSubmit={handleSubmit}
-        className={`flex items-end space-x-2 bg-slate-700/60 rounded-xl p-1.5 shadow-lg border border-slate-600/80 focus-within:ring-2 ${focusRingColorClass} transition-shadow`}
+        className={`flex items-end space-x-2 bg-slate-700/60 rounded-xl p-2 shadow-lg border border-slate-600/80 focus-within:ring-2 ${focusRingColorClass} transition-shadow`} // Increased padding for touch
       >
         <input
           type="file"
@@ -347,7 +347,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
           type="button"
           onClick={handleAttachFileClick}
           disabled={isLoading}
-          className={`p-2.5 rounded-lg ${attachButtonColorClass} hover:bg-slate-600/50 disabled:text-slate-500 transition-colors`}
+          className={`p-3 rounded-lg ${attachButtonColorClass} hover:bg-slate-600/50 disabled:text-slate-500 transition-colors`} // Increased touch target size
           aria-label="Attach file"
         >
           <Paperclip className="w-5 h-5" />
@@ -363,18 +363,18 @@ const ChatInput: React.FC<ChatInputProps> = ({
             }
           }}
           placeholder={activePersona.placeholderText || "Ask Hempbis AI anything..."}
-          className="flex-grow py-2.5 px-2 bg-transparent border-none focus:ring-0 resize-none min-h-[2.75rem] max-h-40 leading-tight text-slate-100 placeholder-slate-400 text-sm"
+          className="flex-grow py-3 px-2.5 bg-transparent border-none focus:ring-0 resize-none min-h-[2.75rem] max-h-40 leading-tight text-slate-100 placeholder-slate-400 text-sm" // Increased padding for touch
           rows={1}
           disabled={isLoading}
         />
         <button
           type="submit"
           disabled={isLoading || (!inputValue.trim() && !selectedFile)}
-          className={`p-2.5 rounded-lg text-white transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-800
+          className={`p-3 rounded-lg text-white transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-800
             ${isLoading || (!inputValue.trim() && !selectedFile)
               ? 'bg-slate-500 cursor-not-allowed'
               : `${sendButtonBaseClass}`
-            }`}
+            }`} // Increased touch target size
         >
           {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
         </button>

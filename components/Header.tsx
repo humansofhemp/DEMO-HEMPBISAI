@@ -64,44 +64,43 @@ const Header: React.FC<HeaderProps> = ({
   }, []);
 
   return (
-    <header className={`${headerBgClass} border-b ${headerBorderClass} ${headerTextColor} p-3 sticky top-0 z-50 backdrop-blur-md transition-colors duration-300`}>
+    <header className={`${headerBgClass} border-b ${headerBorderClass} ${headerTextColor} p-2 md:p-3 sticky top-0 z-50 backdrop-blur-md transition-colors duration-300`}> {/* Reduced padding on mobile */}
       <div className="container mx-auto flex items-center justify-between">
-        <div className="flex items-center space-x-2 md:space-x-3">
+        <div className="flex items-center space-x-2">
           <button
             onClick={onToggleSidebar}
-            className={`p-2 rounded-md text-${accentBase}-200 hover:bg-${accentBase}-700/70 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-${accentBase}-400`}
+            className={`p-2.5 rounded-md text-${accentBase}-200 hover:bg-${accentBase}-700/70 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-${accentBase}-400`} // Increased touch target size
             aria-label="Toggle chat history"
             title="Toggle chat history"
           >
             <Menu className="w-5 h-5" />
           </button>
           <div className="flex items-center space-x-2">
-            {/* Logo background can be a lighter shade of the accent or a contrasting dark neutral */}
             <img src="https://docs.hempbis.com/logo.png" alt="Hempbis AI Logo" className={`w-8 h-8 rounded-full object-contain bg-${accentBase}-700/50 p-0.5`} />
             <h1 className={`text-xl font-semibold tracking-tight hidden sm:block ${headerTextColor}`}>Hempbis AI</h1>
           </div>
         </div>
 
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center">
           <div className="relative" ref={dropdownRef}>
             <button
               type="button"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               disabled={!apiKeyAvailable}
               className={`
-                flex items-center space-x-2 py-2 pl-3 pr-2 text-sm font-medium rounded-md shadow-sm
+                flex items-center space-x-2 py-2 pl-3 pr-2.5 text-sm font-medium rounded-md shadow-sm
                 bg-${accentBase}-700/60 border border-${accentBase}-600 text-${accentBase}-100
                 hover:border-${accentBase}-400 hover:bg-${accentBase}-600/80
                 focus:outline-none focus:ring-2 focus:ring-${accentBase}-400 focus:border-${accentBase}-400
                 transition-all duration-150
                 ${!apiKeyAvailable ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer'}
-              `}
+              `} // Adjusted padding for better touch
               aria-haspopup="listbox"
               aria-expanded={isDropdownOpen}
               title={!apiKeyAvailable ? "Persona selection unavailable" : `Current Persona: ${currentPersona.name}`}
             >
               <PersonaIcon persona={currentPersona} className="w-5 h-5" applyIdleAnimation={true} />
-              <span className="font-semibold">{currentPersona.name}</span>
+              <span className="font-semibold max-w-[100px] sm:max-w-none truncate">{currentPersona.name}</span> {/* Added truncation for small screens */}
               <ChevronDown className={`w-4 h-4 text-${accentBase}-300 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 

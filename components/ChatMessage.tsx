@@ -75,7 +75,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, onSuggestionClick })
 
   const bubbleMaxWidthClass = (isSystem || isHistoryInfo)
     ? 'max-w-full sm:max-w-[90%]' 
-    : 'max-w-[95%] sm:max-w-[75%] md:max-w-[70%]';
+    : 'max-w-[90%] sm:max-w-[75%] md:max-w-[70%]'; // Adjusted for better mobile display
 
   const isPersonaSwitchMessage = isBot && message.text.toLowerCase().startsWith("switched to") && message.text.toLowerCase().includes(persona.name.toLowerCase());
   const isStreamingBotMessage = isBot && message.text.endsWith('▋');
@@ -124,19 +124,19 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, onSuggestionClick })
             <p className="text-xs">{message.text}</p>
           ) : (
             <div className={`markdown-content prose prose-invert max-w-none 
-                            prose-p:my-4 prose-p:leading-relaxed
-                            prose-ul:my-4 prose-ol:my-4
-                            prose-li:my-2 prose-li:leading-relaxed
+                            prose-p:my-3 prose-p:leading-relaxed
+                            prose-ul:my-3 prose-ol:my-3
+                            prose-li:my-1.5 prose-li:leading-relaxed
                             prose-strong:text-slate-50 prose-strong:font-bold
-                            prose-headings:text-slate-100 prose-headings:font-semibold prose-headings:mt-6 prose-headings:mb-3
+                            prose-headings:text-slate-100 prose-headings:font-semibold prose-headings:mt-5 prose-headings:mb-2.5
                             prose-a:text-sky-400 prose-a:no-underline hover:prose-a:underline hover:prose-a:text-sky-300
                             prose-code:text-pink-400 prose-code:font-mono prose-code:text-sm prose-code:bg-slate-800/70 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded-md
-                            prose-pre:bg-slate-800/90 prose-pre:border prose-pre:border-slate-700 prose-pre:rounded-lg prose-pre:p-4 prose-pre:text-slate-200 prose-pre:text-sm prose-pre:leading-relaxed
+                            prose-pre:bg-slate-800/90 prose-pre:border prose-pre:border-slate-700 prose-pre:rounded-lg prose-pre:p-3 prose-pre:text-slate-200 prose-pre:text-sm prose-pre:leading-relaxed prose-pre:overflow-x-auto
                             prose-blockquote:border-l-4 prose-blockquote:border-sky-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-slate-300
-                            prose-table:border prose-table:border-slate-600 prose-th:bg-slate-800 prose-th:p-2 prose-th:border prose-th:border-slate-600 prose-td:p-2 prose-td:border prose-td:border-slate-600
+                            prose-table:border prose-table:border-slate-600 prose-th:bg-slate-800 prose-th:p-2 prose-th:border prose-th:border-slate-600 prose-td:p-2 prose-td:border prose-td:border-slate-600 prose-table:overflow-x-auto prose-table:block prose-table:max-w-full
                             ${isBot && personaDisplayName && !isPersonaSwitchMessage ? 'pt-2.5' : ''} 
                             ${isPersonaSwitchMessage ? 'flex items-center text-sm text-slate-300' : ''} 
-                            `}
+                            text-sm sm:text-base`} // Added responsive text sizing
             >
               {isPersonaSwitchMessage && (
                 <PersonaBotIcon persona={persona} className={`w-4 h-4 mr-1.5`} />
@@ -202,13 +202,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message, onSuggestionClick })
               onClick={handleCopy}
               title={copied ? "Copied!" : "Copy text"}
               aria-label={copied ? "Message content copied to clipboard" : "Copy message content to clipboard"}
-              className={`absolute top-1 right-1 p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-200 ${
+              className={`absolute top-1 right-1 p-2 rounded-full opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all duration-200 ${  // Increased touch target size and added focus state
                 isUser
                   ? `text-${currentAccentColorName}-300 hover:text-${currentAccentColorName}-100 hover:bg-${currentAccentColorName}-700/50`
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-600/50'
               }`}
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />} {/* Increased icon size */}
             </button>
           )}
         </div>

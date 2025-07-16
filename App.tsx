@@ -118,7 +118,7 @@ const App: React.FC = () => {
   const initializeNewChatSession = useCallback(async (
     personaToUse: AIPersona, 
     threadToContinue?: ChatThread
-  ): Promise<boolean> => { 
+  ): Promise<boolean> => {
     setInputLoading(true);
     setError(null);
     
@@ -763,7 +763,7 @@ const App: React.FC = () => {
         isVisible={isSidebarVisible}
         onToggleVisibility={handleToggleSidebar}
       />
-      <div className="flex flex-col flex-1 min-w-0"> {/* Added min-w-0 for flex child truncation */}
+      <div className="flex flex-col flex-1 min-w-0 w-full"> {/* Added w-full for better mobile handling */}
         <Header
           activePersona={activePersona}
           onPersonaChange={handlePersonaChange}
@@ -772,7 +772,7 @@ const App: React.FC = () => {
         />
         <main 
             ref={chatContainerRef} 
-            className={`flex-1 overflow-y-auto p-4 md:p-6 space-y-4 ${mainAreaBg} transition-colors duration-500 ease-in-out relative`} // Ensure main takes up space
+            className={`flex-1 overflow-y-auto p-3 md:p-6 space-y-4 ${mainAreaBg} transition-colors duration-500 ease-in-out relative`} // Reduced padding on mobile
             aria-live="polite"
             role="log"
         >
@@ -795,8 +795,8 @@ const App: React.FC = () => {
             onSendMessage={handleSendMessage} 
             isLoading={inputLoading || apiKeyMissing} 
             activePersona={activePersona}
-            onPersonaChange={handlePersonaChange} // Keep this for ChatInput's own persona switcher
-            allPersonas={AI_PERSONAS} // For ChatInput's persona switcher
+            onPersonaChange={handlePersonaChange}
+            allPersonas={AI_PERSONAS}
         />
         <Footer />
       </div>
